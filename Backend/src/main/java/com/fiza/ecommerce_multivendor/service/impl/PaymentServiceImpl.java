@@ -1,5 +1,21 @@
 package com.fiza.ecommerce_multivendor.service.impl;
 
+import java.util.Optional;
+import java.util.Set;
+
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import com.fiza.ecommerce_multivendor.domain.PaymentOrderStatus;
+import com.fiza.ecommerce_multivendor.domain.PaymentStatus;
+import com.fiza.ecommerce_multivendor.model.Order;
+import com.fiza.ecommerce_multivendor.model.PaymentOrder;
+import com.fiza.ecommerce_multivendor.model.User;
+import com.fiza.ecommerce_multivendor.repository.CartRepository;
+import com.fiza.ecommerce_multivendor.repository.OrderRepository;
+import com.fiza.ecommerce_multivendor.repository.PaymentOrderRepository;
+import com.fiza.ecommerce_multivendor.service.PaymentService;
 import com.razorpay.Payment;
 import com.razorpay.PaymentLink;
 import com.razorpay.RazorpayClient;
@@ -8,23 +24,8 @@ import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionCreateParams;
-import com.fiza.ecommerce_multivendor.domain.PaymentOrderStatus;
-import com.fiza.ecommerce_multivendor.domain.PaymentStatus;
-import com.fiza.ecommerce_multivendor.model.Cart;
-import com.fiza.ecommerce_multivendor.model.Order;
-import com.fiza.ecommerce_multivendor.model.PaymentOrder;
-import com.fiza.ecommerce_multivendor.model.User;
-import com.fiza.ecommerce_multivendor.repository.CartRepository;
-import com.fiza.ecommerce_multivendor.repository.OrderRepository;
-import com.fiza.ecommerce_multivendor.repository.PaymentOrderRepository;
-import com.fiza.ecommerce_multivendor.service.PaymentService;
-import lombok.RequiredArgsConstructor;
-import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-import java.util.Set;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -67,8 +68,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public PaymentOrder getPaymentOrderByPaymentId(String paymentLinkId) throws Exception {
-        PaymentOrder paymentOrder = paymentOrderRepository
-                .findByPaymentLinkId(paymentLinkId);
+        PaymentOrder paymentOrder = paymentOrderRepository.findByPaymentLinkId(paymentLinkId);
 
         if (paymentOrder == null) {
             throw new Exception("payment order not found with id " + paymentLinkId);
@@ -77,8 +77,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public Boolean ProceedPaymentOrder(PaymentOrder paymentOrder,
-            String paymentId,
+    public Boolean ProceedPaymentOrder(PaymentOrder paymentOrder, String paymentId,
             String paymentLinkId) throws RazorpayException {
 
         if (paymentOrder.getStatus().equals(PaymentOrderStatus.PENDING)) {
@@ -110,9 +109,7 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public PaymentLink createRazorpayPaymentLink(User user,
-            Long Amount,
-            Long orderId)
+    public PaymentLink createRazorpayPaymentLink(User user, Long Amount, Long orderId)
             throws RazorpayException {
 
         Long amount = Amount * 100;
@@ -141,7 +138,8 @@ public class PaymentServiceImpl implements PaymentService {
             paymentLinkRequest.put("reminder_enable", true);
 
             // Set the callback URL and method
-            paymentLinkRequest.put("callback_url", "http://localhost:3000/payment-success/" + orderId);
+            paymentLinkRequest.put("callback_url",
+                    "http://localhost:3000/payment-success/" + orderId);
             paymentLinkRequest.put("callback_method", "get");
 
             PaymentLink payment = razorpay.paymentLink.create(paymentLinkRequest);
@@ -161,7 +159,8 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public String createStripePaymentLink(User user, Long amount, Long orderId) throws StripeException {
+    public String createStripePaymentLink(User user, Long amount, Long orderId)
+            throws StripeException {
         Stripe.apiKey = stripeSecretKey;
 
         SessionCreateParams params = SessionCreateParams.builder()
@@ -169,15 +168,11 @@ public class PaymentServiceImpl implements PaymentService {
                 .setMode(SessionCreateParams.Mode.PAYMENT)
                 .setSuccessUrl("http://localhost:3000/payment-success/" + orderId)
                 .setCancelUrl("http://localhost:3000/payment/cancel")
-                .addLineItem(SessionCreateParams.LineItem.builder()
-                        .setQuantity(1L)
+                .addLineItem(SessionCreateParams.LineItem.builder().setQuantity(1L)
                         .setPriceData(SessionCreateParams.LineItem.PriceData.builder()
-                                .setCurrency("usd")
-                                .setUnitAmount(amount * 100)
+                                .setCurrency("usd").setUnitAmount(amount * 100)
                                 .setProductData(SessionCreateParams.LineItem.PriceData.ProductData
-                                        .builder()
-                                        .setName("Top up wallet")
-                                        .build())
+                                        .builder().setName("Top up wallet").build())
                                 .build())
                         .build())
                 .build();

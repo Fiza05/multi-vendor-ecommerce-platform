@@ -1,5 +1,11 @@
 package com.fiza.ecommerce_multivendor.service.impl;
 
+import java.time.LocalDate;
+import java.util.List;
+
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Service;
+
 import com.fiza.ecommerce_multivendor.exception.CouponNotValidException;
 import com.fiza.ecommerce_multivendor.model.Cart;
 import com.fiza.ecommerce_multivendor.model.Coupon;
@@ -8,14 +14,8 @@ import com.fiza.ecommerce_multivendor.repository.CartRepository;
 import com.fiza.ecommerce_multivendor.repository.CouponRepository;
 import com.fiza.ecommerce_multivendor.repository.UserRepository;
 import com.fiza.ecommerce_multivendor.service.CouponService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -26,10 +26,7 @@ public class CouponServiceImpl implements CouponService {
     private final CartRepository cartRepository;
 
     @Override
-    public Cart applyCoupon(String code,
-            double orderValue,
-            User user)
-            throws Exception {
+    public Cart applyCoupon(String code, double orderValue, User user) throws Exception {
         Coupon coupon = couponRepository.findByCode(code);
         Cart cart = cartRepository.findByUserId(user.getId());
 
@@ -40,19 +37,20 @@ public class CouponServiceImpl implements CouponService {
             throw new CouponNotValidException("coupon already used");
         }
         if (orderValue <= coupon.getMinimumOrderValue()) {
-            throw new CouponNotValidException("valid for minimum order value " + coupon.getMinimumOrderValue());
+            throw new CouponNotValidException(
+                    "valid for minimum order value " + coupon.getMinimumOrderValue());
         }
 
-        if (coupon.isActive() &&
-                LocalDate.now().isAfter(coupon.getValidityStartDate()) &&
-                LocalDate.now().isBefore(coupon.getValidityEndDate())
+        if (coupon.isActive() && LocalDate.now().isAfter(coupon.getValidityStartDate())
+                && LocalDate.now().isBefore(coupon.getValidityEndDate())
 
         ) {
 
             user.getUsedCoupons().add(coupon);
             userRepository.save(user);
 
-            double discountedPrice = Math.round((cart.getTotalSellingPrice() * coupon.getDiscountPercentage()) / 100);
+            double discountedPrice = Math
+                    .round((cart.getTotalSellingPrice() * coupon.getDiscountPercentage()) / 100);
             cart.setTotalSellingPrice(cart.getTotalSellingPrice() - discountedPrice);
             cart.setCouponCode(code);
             cart.setCouponPrice((int) discountedPrice);

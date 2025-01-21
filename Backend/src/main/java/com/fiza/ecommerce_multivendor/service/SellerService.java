@@ -1,10 +1,10 @@
 package com.fiza.ecommerce_multivendor.service;
 
+import java.util.List;
+
 import com.fiza.ecommerce_multivendor.domain.AccountStatus;
 import com.fiza.ecommerce_multivendor.exception.SellerException;
 import com.fiza.ecommerce_multivendor.model.Seller;
-import java.util.List;
-import java.util.Optional;
 
 public interface SellerService {
     Seller getSellerProfile(String jwt) throws SellerException;

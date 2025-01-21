@@ -3,9 +3,6 @@ package com.fiza.ecommerce_multivendor.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fiza.ecommerce_multivendor.domain.USER_ROLE;
-import com.fiza.ecommerce_multivendor.model.Seller;
-import com.fiza.ecommerce_multivendor.repository.SellerRepository;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,7 +10,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.fiza.ecommerce_multivendor.domain.USER_ROLE;
+import com.fiza.ecommerce_multivendor.model.Seller;
 import com.fiza.ecommerce_multivendor.model.User;
+import com.fiza.ecommerce_multivendor.repository.SellerRepository;
 import com.fiza.ecommerce_multivendor.repository.UserRepository;
 
 @Service
@@ -23,7 +23,8 @@ public class CustomeUserServiceImplementation implements UserDetailsService {
 	private final SellerRepository sellerRepository;
 	private static final String SELLER_PREFIX = "seller_";
 
-	public CustomeUserServiceImplementation(UserRepository userRepository, SellerRepository sellerRepository) {
+	public CustomeUserServiceImplementation(UserRepository userRepository,
+			SellerRepository sellerRepository) {
 		this.userRepository = userRepository;
 		this.sellerRepository = sellerRepository;
 	}

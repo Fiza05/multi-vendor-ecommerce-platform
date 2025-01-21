@@ -1,7 +1,5 @@
 package com.fiza.ecommerce_multivendor.service;
 
-import java.util.List;
-
 import com.fiza.ecommerce_multivendor.exception.UserException;
 import com.fiza.ecommerce_multivendor.model.User;
 

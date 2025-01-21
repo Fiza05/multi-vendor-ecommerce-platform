@@ -1,5 +1,27 @@
 package com.fiza.ecommerce_multivendor.controller;
 
+import java.util.Collection;
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.fiza.ecommerce_multivendor.config.JwtProvider;
 import com.fiza.ecommerce_multivendor.domain.AccountStatus;
 import com.fiza.ecommerce_multivendor.domain.USER_ROLE;
@@ -10,24 +32,15 @@ import com.fiza.ecommerce_multivendor.model.VerificationCode;
 import com.fiza.ecommerce_multivendor.repository.VerificationCodeRepository;
 import com.fiza.ecommerce_multivendor.response.ApiResponse;
 import com.fiza.ecommerce_multivendor.response.AuthResponse;
-import com.fiza.ecommerce_multivendor.service.*;
+import com.fiza.ecommerce_multivendor.service.EmailService;
+import com.fiza.ecommerce_multivendor.service.SellerReportService;
+import com.fiza.ecommerce_multivendor.service.SellerService;
+import com.fiza.ecommerce_multivendor.service.VerificationService;
 import com.fiza.ecommerce_multivendor.service.impl.CustomeUserServiceImplementation;
 import com.fiza.ecommerce_multivendor.utils.OtpUtils;
+
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.Collection;
-import java.util.List;
 
 @RestController
 @RequestMapping("/sellers")
@@ -48,11 +61,13 @@ public class SellerController {
         Seller seller = sellerService.getSellerByEmail(req.getEmail());
 
         String otp = OtpUtils.generateOTP();
-        VerificationCode verificationCode = verificationService.createVerificationCode(otp, req.getEmail());
+        VerificationCode verificationCode =
+                verificationService.createVerificationCode(otp, req.getEmail());
 
         String subject = "Zosh Bazaar Login Otp";
         String text = "your login otp is - ";
-        emailService.sendVerificationOtpEmail(req.getEmail(), verificationCode.getOtp(), subject, text);
+        emailService.sendVerificationOtpEmail(req.getEmail(), verificationCode.getOtp(), subject,
+                text);
 
         ApiResponse res = new ApiResponse();
         res.setMessage("otp sent");
@@ -82,7 +97,8 @@ public class SellerController {
         authResponse.setJwt(token);
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
-        String roleName = authorities.isEmpty() ? null : authorities.iterator().next().getAuthority();
+        String roleName =
+                authorities.isEmpty() ? null : authorities.iterator().next().getAuthority();
 
         authResponse.setRole(USER_ROLE.valueOf(roleName));
 
@@ -90,7 +106,8 @@ public class SellerController {
     }
 
     private Authentication authenticate(String username) {
-        UserDetails userDetails = customeUserServiceImplementation.loadUserByUsername("seller_" + username);
+        UserDetails userDetails =
+                customeUserServiceImplementation.loadUserByUsername("seller_" + username);
 
         System.out.println("sign in userDetails - " + userDetails);
 
@@ -99,11 +116,13 @@ public class SellerController {
             throw new BadCredentialsException("Invalid username or password");
         }
 
-        return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        return new UsernamePasswordAuthenticationToken(userDetails, null,
+                userDetails.getAuthorities());
     }
 
     @PatchMapping("/verify/{otp}")
-    public ResponseEntity<Seller> verifySellerEmail(@PathVariable String otp) throws SellerException {
+    public ResponseEntity<Seller> verifySellerEmail(@PathVariable String otp)
+            throws SellerException {
 
         VerificationCode verificationCode = verificationCodeRepository.findByOtp(otp);
 
@@ -117,11 +136,13 @@ public class SellerController {
     }
 
     @PostMapping
-    public ResponseEntity<Seller> createSeller(@RequestBody Seller seller) throws SellerException, MessagingException {
+    public ResponseEntity<Seller> createSeller(@RequestBody Seller seller)
+            throws SellerException, MessagingException {
         Seller savedSeller = sellerService.createSeller(seller);
 
         String otp = OtpUtils.generateOTP();
-        VerificationCode verificationCode = verificationService.createVerificationCode(otp, seller.getEmail());
+        VerificationCode verificationCode =
+                verificationService.createVerificationCode(otp, seller.getEmail());
 
         String subject = "Zosh Bazaar Email Verification Code";
         String text = "Welcome to Zosh Bazaar, verify your account using this link ";
@@ -138,16 +159,16 @@ public class SellerController {
     }
 
     @GetMapping("/profile")
-    public ResponseEntity<Seller> getSellerByJwt(
-            @RequestHeader("Authorization") String jwt) throws SellerException {
+    public ResponseEntity<Seller> getSellerByJwt(@RequestHeader("Authorization") String jwt)
+            throws SellerException {
         String email = jwtProvider.getEmailFromJwtToken(jwt);
         Seller seller = sellerService.getSellerByEmail(email);
         return new ResponseEntity<>(seller, HttpStatus.OK);
     }
 
     @GetMapping("/report")
-    public ResponseEntity<SellerReport> getSellerReport(
-            @RequestHeader("Authorization") String jwt) throws SellerException {
+    public ResponseEntity<SellerReport> getSellerReport(@RequestHeader("Authorization") String jwt)
+            throws SellerException {
         String email = jwtProvider.getEmailFromJwtToken(jwt);
         Seller seller = sellerService.getSellerByEmail(email);
         SellerReport report = sellerReportService.getSellerReport(seller);
@@ -162,8 +183,8 @@ public class SellerController {
     }
 
     @PatchMapping()
-    public ResponseEntity<Seller> updateSeller(
-            @RequestHeader("Authorization") String jwt, @RequestBody Seller seller) throws SellerException {
+    public ResponseEntity<Seller> updateSeller(@RequestHeader("Authorization") String jwt,
+            @RequestBody Seller seller) throws SellerException {
 
         Seller profile = sellerService.getSellerProfile(jwt);
         Seller updatedSeller = sellerService.updateSeller(profile.getId(), seller);

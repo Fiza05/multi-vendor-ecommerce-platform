@@ -1,6 +1,7 @@
 package com.fiza.ecommerce_multivendor.model;
 
 import com.fiza.ecommerce_multivendor.domain.PaymentStatus;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

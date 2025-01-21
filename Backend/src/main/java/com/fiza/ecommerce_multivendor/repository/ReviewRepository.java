@@ -1,11 +1,10 @@
 package com.fiza.ecommerce_multivendor.repository;
 
-import com.fiza.ecommerce_multivendor.model.Product;
-import com.fiza.ecommerce_multivendor.model.Review;
-import com.fiza.ecommerce_multivendor.model.User;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
+import com.fiza.ecommerce_multivendor.model.Review;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
     List<Review> findReviewsByUserId(Long userId);

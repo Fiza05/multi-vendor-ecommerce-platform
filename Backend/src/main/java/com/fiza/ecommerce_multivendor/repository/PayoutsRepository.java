@@ -1,10 +1,11 @@
 package com.fiza.ecommerce_multivendor.repository;
 
-import com.fiza.ecommerce_multivendor.domain.PayoutsStatus;
-import com.fiza.ecommerce_multivendor.model.Payouts;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
+import com.fiza.ecommerce_multivendor.domain.PayoutsStatus;
+import com.fiza.ecommerce_multivendor.model.Payouts;
 
 public interface PayoutsRepository extends JpaRepository<Payouts, Long> {
 

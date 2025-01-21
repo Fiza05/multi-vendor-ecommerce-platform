@@ -1,9 +1,8 @@
 package com.fiza.ecommerce_multivendor.dto;
 
-import com.fiza.ecommerce_multivendor.model.User;
-import lombok.Data;
-
 import java.util.List;
+
+import lombok.Data;
 
 @Data
 public class OrderHistory {

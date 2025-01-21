@@ -1,6 +1,5 @@
 package com.fiza.ecommerce_multivendor.config;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -26,12 +25,13 @@ public class AppConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        http.sessionManagement(
+                management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(Authorize -> Authorize
                         // .requestMatchers("/api/admin/**").hasAnyRole("SHOP_OWNER","ADMIN")
                         .requestMatchers("/api/**").authenticated()
-                        .requestMatchers("/api/products/*/reviews").permitAll()
-                        .anyRequest().permitAll())
+                        .requestMatchers("/api/products/*/reviews").permitAll().anyRequest()
+                        .permitAll())
                 .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()));

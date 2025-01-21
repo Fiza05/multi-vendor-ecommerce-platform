@@ -20,8 +20,7 @@ public class AiChatBotController {
     private final UserService userService;
 
     @PostMapping()
-    public ResponseEntity<ApiResponse> generate(
-            @RequestBody Prompt prompt,
+    public ResponseEntity<ApiResponse> generate(@RequestBody Prompt prompt,
             @RequestParam(required = false) Long userId,
             @RequestParam(required = false) Long productId,
             @RequestHeader(required = false, name = "Authorization") String jwt) throws Exception {

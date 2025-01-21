@@ -1,18 +1,18 @@
 package com.fiza.ecommerce_multivendor.service.impl;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.fiza.ecommerce_multivendor.dto.RevenueChart;
 import com.fiza.ecommerce_multivendor.model.Order;
 import com.fiza.ecommerce_multivendor.repository.OrderRepository;
 import com.fiza.ecommerce_multivendor.service.RevenueService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -28,10 +28,9 @@ public class RevenueServiceImpl implements RevenueService {
         for (int i = days - 1; i >= 0; i--) {
             LocalDate date = currentDate.minusDays(i);
             double dailyRevenue = orderRepository
-                    .findBySellerIdAndOrderDateBetween(sellerId, date.atStartOfDay(), date.plusDays(1).atStartOfDay())
-                    .stream()
-                    .mapToDouble(Order::getTotalSellingPrice)
-                    .sum();
+                    .findBySellerIdAndOrderDateBetween(sellerId, date.atStartOfDay(),
+                            date.plusDays(1).atStartOfDay())
+                    .stream().mapToDouble(Order::getTotalSellingPrice).sum();
 
             RevenueChart revenueChart = new RevenueChart();
             revenueChart.setRevenue(dailyRevenue);
@@ -56,13 +55,12 @@ public class RevenueServiceImpl implements RevenueService {
             double monthlyRevenue = orderRepository
                     .findBySellerIdAndOrderDateBetween(sellerId, startOfMonth.atStartOfDay(),
                             startOfNextMonth.atStartOfDay())
-                    .stream()
-                    .mapToDouble(Order::getTotalSellingPrice)
-                    .sum();
+                    .stream().mapToDouble(Order::getTotalSellingPrice).sum();
 
             RevenueChart revenueChart = new RevenueChart();
             revenueChart.setRevenue(monthlyRevenue);
-            revenueChart.setDate(date.getYear() + "-" + String.format("%02d", date.getMonthValue()));
+            revenueChart
+                    .setDate(date.getYear() + "-" + String.format("%02d", date.getMonthValue()));
 
             revenueData.add(revenueChart);
         }
@@ -82,9 +80,7 @@ public class RevenueServiceImpl implements RevenueService {
             double yearlyRevenue = orderRepository
                     .findBySellerIdAndOrderDateBetween(sellerId, startOfYear.atStartOfDay(),
                             startOfNextYear.atStartOfDay())
-                    .stream()
-                    .mapToDouble(Order::getTotalSellingPrice)
-                    .sum();
+                    .stream().mapToDouble(Order::getTotalSellingPrice).sum();
 
             RevenueChart revenueChart = new RevenueChart();
             revenueChart.setRevenue(yearlyRevenue);
@@ -113,14 +109,13 @@ public class RevenueServiceImpl implements RevenueService {
             // Calculate revenue for this hour (from startOfHour to startOfNextHour)
             double hourlyRevenue = orderRepository
                     .findBySellerIdAndOrderDateBetween(sellerId, startOfHour, startOfNextHour)
-                    .stream()
-                    .mapToDouble(Order::getTotalSellingPrice)
-                    .sum();
+                    .stream().mapToDouble(Order::getTotalSellingPrice).sum();
 
             // Prepare the data for this hour
             RevenueChart revenueChart = new RevenueChart();
             revenueChart.setRevenue(hourlyRevenue);
-            revenueChart.setDate(startOfHour.getHour() + ":00"); // Format as "HH:00" (e.g., "00:00", "01:00")
+            revenueChart.setDate(startOfHour.getHour() + ":00"); // Format as "HH:00" (e.g.,
+                                                                 // "00:00", "01:00")
 
             // Add the hourly revenue data to the list
             revenueData.add(revenueChart);

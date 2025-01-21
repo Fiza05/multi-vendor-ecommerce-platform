@@ -1,9 +1,10 @@
 package com.fiza.ecommerce_multivendor.repository;
 
-import com.fiza.ecommerce_multivendor.model.Transaction;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
+import com.fiza.ecommerce_multivendor.model.Transaction;
 
 public interface TransactionRepository extends JpaRepository<Transaction, Integer> {
 

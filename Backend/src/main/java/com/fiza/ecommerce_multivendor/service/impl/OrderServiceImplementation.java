@@ -1,22 +1,33 @@
 package com.fiza.ecommerce_multivendor.service.impl;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+
 import com.fiza.ecommerce_multivendor.domain.OrderStatus;
 import com.fiza.ecommerce_multivendor.domain.PaymentStatus;
 import com.fiza.ecommerce_multivendor.exception.OrderException;
-import com.fiza.ecommerce_multivendor.model.*;
+import com.fiza.ecommerce_multivendor.model.Address;
+import com.fiza.ecommerce_multivendor.model.Cart;
+import com.fiza.ecommerce_multivendor.model.CartItem;
+import com.fiza.ecommerce_multivendor.model.Order;
+import com.fiza.ecommerce_multivendor.model.OrderItem;
+import com.fiza.ecommerce_multivendor.model.User;
 import com.fiza.ecommerce_multivendor.repository.AddressRepository;
 import com.fiza.ecommerce_multivendor.repository.OrderItemRepository;
 import com.fiza.ecommerce_multivendor.repository.OrderRepository;
 import com.fiza.ecommerce_multivendor.repository.UserRepository;
-
 import com.fiza.ecommerce_multivendor.service.CartService;
 import com.fiza.ecommerce_multivendor.service.OrderItemService;
 import com.fiza.ecommerce_multivendor.service.OrderService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -48,8 +59,7 @@ public class OrderServiceImplementation implements OrderService {
 			Long sellerId = entry.getKey();
 			List<CartItem> cartItems = entry.getValue();
 
-			int totalOrderPrice = cartItems.stream()
-					.mapToInt(CartItem::getSellingPrice).sum();
+			int totalOrderPrice = cartItems.stream().mapToInt(CartItem::getSellingPrice).sum();
 			int totalItem = cartItems.stream().mapToInt(CartItem::getQuantity).sum();
 
 			Order createdOrder = new Order();
@@ -114,8 +124,7 @@ public class OrderServiceImplementation implements OrderService {
 	}
 
 	@Override
-	public Order updateOrderStatus(Long orderId, OrderStatus orderStatus)
-			throws OrderException {
+	public Order updateOrderStatus(Long orderId, OrderStatus orderStatus) throws OrderException {
 		Order order = findOrderById(orderId);
 		order.setOrderStatus(orderStatus);
 		return orderRepository.save(order);

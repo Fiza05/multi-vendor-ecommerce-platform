@@ -1,18 +1,18 @@
 package com.fiza.ecommerce_multivendor.service.impl;
 
-import com.fiza.ecommerce_multivendor.exception.ProductException;
+import org.springframework.stereotype.Service;
 
+import com.fiza.ecommerce_multivendor.exception.ProductException;
 import com.fiza.ecommerce_multivendor.model.Cart;
 import com.fiza.ecommerce_multivendor.model.CartItem;
 import com.fiza.ecommerce_multivendor.model.Product;
 import com.fiza.ecommerce_multivendor.model.User;
 import com.fiza.ecommerce_multivendor.repository.CartItemRepository;
 import com.fiza.ecommerce_multivendor.repository.CartRepository;
-import com.fiza.ecommerce_multivendor.service.CartItemService;
 import com.fiza.ecommerce_multivendor.service.CartService;
 import com.fiza.ecommerce_multivendor.service.ProductService;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -54,14 +54,11 @@ public class CartServiceImplementation implements CartService {
 	}
 
 	@Override
-	public CartItem addCartItem(User user,
-			Product product,
-			String size,
-			int quantity) throws ProductException {
+	public CartItem addCartItem(User user, Product product, String size, int quantity)
+			throws ProductException {
 		Cart cart = findUserCart(user);
 
-		CartItem isPresent = cartItemRepository.findByCartAndProductAndSize(
-				cart, product, size);
+		CartItem isPresent = cartItemRepository.findByCartAndProductAndSize(cart, product, size);
 
 		if (isPresent == null) {
 			CartItem cartItem = new CartItem();

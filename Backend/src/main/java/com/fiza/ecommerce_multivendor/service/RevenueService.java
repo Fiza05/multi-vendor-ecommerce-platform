@@ -1,9 +1,8 @@
 package com.fiza.ecommerce_multivendor.service;
 
-import com.fiza.ecommerce_multivendor.dto.RevenueChart;
-
 import java.util.List;
-import java.util.Map;
+
+import com.fiza.ecommerce_multivendor.dto.RevenueChart;
 
 public interface RevenueService {
     List<RevenueChart> getDailyRevenueForChart(int days, Long sellerId);

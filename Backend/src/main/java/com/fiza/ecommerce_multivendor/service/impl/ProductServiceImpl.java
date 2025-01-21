@@ -36,7 +36,8 @@ public class ProductServiceImpl implements ProductService {
 
             Seller seller) throws ProductException {
 
-        int discountPercentage = calculateDiscountPercentage(req.getMrpPrice(), req.getSellingPrice());
+        int discountPercentage =
+                calculateDiscountPercentage(req.getMrpPrice(), req.getSellingPrice());
 
         Category category1 = categoryRepository.findByCategoryId(req.getCategory());
         if (category1 == null) {
@@ -126,15 +127,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<Product> getAllProduct(String category,
-            String brand,
-            String color,
-            String size,
-            Integer minPrice,
-            Integer maxPrice,
-            Integer minDiscount,
-            String sort,
-            String stock,
+    public Page<Product> getAllProduct(String category, String brand, String color, String size,
+            Integer minPrice, Integer maxPrice, Integer minDiscount, String sort, String stock,
             Integer pageNumber) {
         Specification<Product> spec = (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
@@ -146,9 +140,11 @@ public class ProductServiceImpl implements ProductService {
                 // predicates.add(criteriaBuilder.equal(categoryJoin.get("parentCategory").get("categoryId"),
                 // category));
                 Predicate categoryPredicate = criteriaBuilder.or(
-                        criteriaBuilder.equal(categoryJoin.get("categoryId"), category), // Match categoryId
-                        criteriaBuilder.equal(categoryJoin.get("parentCategory").get("categoryId"), category) // Match
-                                                                                                              // parentCategory.categoryId
+                        criteriaBuilder.equal(categoryJoin.get("categoryId"), category), // Match
+                                                                                         // categoryId
+                        criteriaBuilder.equal(categoryJoin.get("parentCategory").get("categoryId"),
+                                category) // Match
+                                          // parentCategory.categoryId
                 );
 
                 predicates.add(categoryPredicate);
@@ -165,13 +161,13 @@ public class ProductServiceImpl implements ProductService {
             }
 
             if (minPrice != null) {
-                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("sellingPrice"),
-                        minPrice));
+                predicates.add(
+                        criteriaBuilder.greaterThanOrEqualTo(root.get("sellingPrice"), minPrice));
             }
 
             if (maxPrice != null) {
-                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("sellingPrice"),
-                        maxPrice));
+                predicates
+                        .add(criteriaBuilder.lessThanOrEqualTo(root.get("sellingPrice"), maxPrice));
             }
 
             if (minDiscount != null) {
@@ -188,10 +184,10 @@ public class ProductServiceImpl implements ProductService {
         Pageable pageable;
         if (sort != null && !sort.isEmpty()) {
             pageable = switch (sort) {
-                case "price_low" ->
-                    PageRequest.of(pageNumber != null ? pageNumber : 0, 10, Sort.by("sellingPrice").ascending());
-                case "price_high" ->
-                    PageRequest.of(pageNumber != null ? pageNumber : 0, 10, Sort.by("sellingPrice").descending());
+                case "price_low" -> PageRequest.of(pageNumber != null ? pageNumber : 0, 10,
+                        Sort.by("sellingPrice").ascending());
+                case "price_high" -> PageRequest.of(pageNumber != null ? pageNumber : 0, 10,
+                        Sort.by("sellingPrice").descending());
                 default -> PageRequest.of(pageNumber != null ? pageNumber : 0, 10, Sort.unsorted());
             };
         } else {

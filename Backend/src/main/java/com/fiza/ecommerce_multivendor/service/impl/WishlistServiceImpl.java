@@ -1,16 +1,15 @@
 package com.fiza.ecommerce_multivendor.service.impl;
 
+import org.springframework.stereotype.Service;
+
 import com.fiza.ecommerce_multivendor.exception.WishlistNotFoundException;
 import com.fiza.ecommerce_multivendor.model.Product;
 import com.fiza.ecommerce_multivendor.model.User;
 import com.fiza.ecommerce_multivendor.model.Wishlist;
 import com.fiza.ecommerce_multivendor.repository.WishlistRepository;
 import com.fiza.ecommerce_multivendor.service.WishlistService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +34,8 @@ public class WishlistServiceImpl implements WishlistService {
     }
 
     @Override
-    public Wishlist addProductToWishlist(User user, Product product) throws WishlistNotFoundException {
+    public Wishlist addProductToWishlist(User user, Product product)
+            throws WishlistNotFoundException {
         Wishlist wishlist = this.getWishlistByUserId(user);
         if (wishlist.getProducts().contains(product)) {
             wishlist.getProducts().remove(product);

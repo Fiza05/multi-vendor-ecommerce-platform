@@ -1,6 +1,7 @@
 package com.fiza.ecommerce_multivendor.model;
 
 import com.fiza.ecommerce_multivendor.domain.HomeCategorySection;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

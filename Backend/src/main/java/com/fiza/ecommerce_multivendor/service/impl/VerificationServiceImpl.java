@@ -1,9 +1,10 @@
 package com.fiza.ecommerce_multivendor.service.impl;
 
+import org.springframework.stereotype.Service;
+
 import com.fiza.ecommerce_multivendor.model.VerificationCode;
 import com.fiza.ecommerce_multivendor.repository.VerificationCodeRepository;
 import com.fiza.ecommerce_multivendor.service.VerificationService;
-import org.springframework.stereotype.Service;
 
 @Service
 public class VerificationServiceImpl implements VerificationService {

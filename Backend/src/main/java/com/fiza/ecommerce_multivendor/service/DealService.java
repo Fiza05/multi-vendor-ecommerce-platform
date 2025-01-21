@@ -1,8 +1,8 @@
 package com.fiza.ecommerce_multivendor.service;
 
-import com.fiza.ecommerce_multivendor.model.Deal;
-
 import java.util.List;
+
+import com.fiza.ecommerce_multivendor.model.Deal;
 
 public interface DealService {
     Deal createDeal(Deal deal);

@@ -1,6 +1,5 @@
 package com.fiza.ecommerce_multivendor.controller;
 
-import com.fiza.ecommerce_multivendor.model.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fiza.ecommerce_multivendor.exception.UserException;
-
+import com.fiza.ecommerce_multivendor.model.User;
 import com.fiza.ecommerce_multivendor.service.UserService;
 
 @RestController
@@ -23,9 +22,8 @@ public class UserController {
 	}
 
 	@GetMapping("/profile")
-	public ResponseEntity<User> getUserProfileHandler(
-			@RequestHeader("Authorization") String jwt) throws UserException {
-
+	public ResponseEntity<User> getUserProfileHandler(@RequestHeader("Authorization") String jwt)
+			throws UserException {
 		System.out.println("/api/users/profile");
 		User user = userService.findUserProfileByJwt(jwt);
 		return new ResponseEntity<>(user, HttpStatus.ACCEPTED);

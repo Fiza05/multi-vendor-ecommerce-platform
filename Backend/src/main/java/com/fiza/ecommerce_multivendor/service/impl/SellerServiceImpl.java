@@ -1,5 +1,11 @@
 package com.fiza.ecommerce_multivendor.service.impl;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
 import com.fiza.ecommerce_multivendor.config.JwtProvider;
 import com.fiza.ecommerce_multivendor.domain.AccountStatus;
 import com.fiza.ecommerce_multivendor.domain.USER_ROLE;
@@ -9,13 +15,8 @@ import com.fiza.ecommerce_multivendor.model.Seller;
 import com.fiza.ecommerce_multivendor.repository.AddressRepository;
 import com.fiza.ecommerce_multivendor.repository.SellerRepository;
 import com.fiza.ecommerce_multivendor.service.SellerService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -98,8 +99,8 @@ public class SellerServiceImpl implements SellerService {
         if (seller.getBusinessDetails() != null
                 && seller.getBusinessDetails().getBusinessName() != null) {
 
-            existingSeller.getBusinessDetails().setBusinessName(
-                    seller.getBusinessDetails().getBusinessName());
+            existingSeller.getBusinessDetails()
+                    .setBusinessName(seller.getBusinessDetails().getBusinessName());
         }
 
         if (seller.getBankDetails() != null
@@ -107,20 +108,17 @@ public class SellerServiceImpl implements SellerService {
                 && seller.getBankDetails().getIfscCode() != null
                 && seller.getBankDetails().getAccountNumber() != null) {
 
-            existingSeller.getBankDetails().setAccountHolderName(
-                    seller.getBankDetails().getAccountHolderName());
-            existingSeller.getBankDetails().setAccountNumber(
-                    seller.getBankDetails().getAccountNumber());
-            existingSeller.getBankDetails().setIfscCode(
-                    seller.getBankDetails().getIfscCode());
+            existingSeller.getBankDetails()
+                    .setAccountHolderName(seller.getBankDetails().getAccountHolderName());
+            existingSeller.getBankDetails()
+                    .setAccountNumber(seller.getBankDetails().getAccountNumber());
+            existingSeller.getBankDetails().setIfscCode(seller.getBankDetails().getIfscCode());
         }
-        if (seller.getPickupAddress() != null
-                && seller.getPickupAddress().getAddress() != null
+        if (seller.getPickupAddress() != null && seller.getPickupAddress().getAddress() != null
                 && seller.getPickupAddress().getMobile() != null
                 && seller.getPickupAddress().getCity() != null
                 && seller.getPickupAddress().getState() != null) {
-            existingSeller.getPickupAddress()
-                    .setAddress(seller.getPickupAddress().getAddress());
+            existingSeller.getPickupAddress().setAddress(seller.getPickupAddress().getAddress());
             existingSeller.getPickupAddress().setCity(seller.getPickupAddress().getCity());
             existingSeller.getPickupAddress().setState(seller.getPickupAddress().getState());
             existingSeller.getPickupAddress().setMobile(seller.getPickupAddress().getMobile());
@@ -151,7 +149,8 @@ public class SellerServiceImpl implements SellerService {
     }
 
     @Override
-    public Seller updateSellerAccountStatus(Long sellerId, AccountStatus status) throws SellerException {
+    public Seller updateSellerAccountStatus(Long sellerId, AccountStatus status)
+            throws SellerException {
         Seller seller = this.getSellerById(sellerId);
         seller.setAccountStatus(status);
         return sellerRepository.save(seller);

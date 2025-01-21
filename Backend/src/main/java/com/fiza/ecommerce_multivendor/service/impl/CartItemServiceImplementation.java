@@ -1,18 +1,16 @@
 package com.fiza.ecommerce_multivendor.service.impl;
 
-import com.fiza.ecommerce_multivendor.exception.CartItemException;
-import com.fiza.ecommerce_multivendor.exception.UserException;
+import java.util.Optional;
 
-import com.fiza.ecommerce_multivendor.model.Cart;
-import com.fiza.ecommerce_multivendor.model.CartItem;
-import com.fiza.ecommerce_multivendor.model.Product;
-import com.fiza.ecommerce_multivendor.model.User;
-import com.fiza.ecommerce_multivendor.repository.CartItemRepository;
-import com.fiza.ecommerce_multivendor.service.CartItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import com.fiza.ecommerce_multivendor.exception.CartItemException;
+import com.fiza.ecommerce_multivendor.exception.UserException;
+import com.fiza.ecommerce_multivendor.model.CartItem;
+import com.fiza.ecommerce_multivendor.model.User;
+import com.fiza.ecommerce_multivendor.repository.CartItemRepository;
+import com.fiza.ecommerce_multivendor.service.CartItemService;
 
 @Service
 public class CartItemServiceImplementation implements CartItemService {
@@ -26,8 +24,7 @@ public class CartItemServiceImplementation implements CartItemService {
 	}
 
 	@Override
-	public CartItem updateCartItem(Long userId,
-			Long id, CartItem cartItem)
+	public CartItem updateCartItem(Long userId, Long id, CartItem cartItem)
 			throws CartItemException, UserException {
 
 		CartItem item = findCartItemById(id);
@@ -49,8 +46,7 @@ public class CartItemServiceImplementation implements CartItemService {
 
 	@Override
 	public void removeCartItem(Long userId, Long cartItemId)
-			throws CartItemException,
-			UserException {
+			throws CartItemException, UserException {
 
 		System.out.println("userId- " + userId + " cartItemId " + cartItemId);
 

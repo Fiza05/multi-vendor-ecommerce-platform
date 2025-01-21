@@ -40,22 +40,18 @@ public class AiChatBotServiceImpl implements AiChatBotService {
         private final UserRepository userRepository;
 
         private JSONArray createFunctionDeclarations() {
-                return new JSONArray()
-                                .put(new JSONObject()
-                                                .put("name", "getUserCart")
-                                                .put("description", "Retrieve the user's cart details")
-                                                .put("parameters", new JSONObject()
-                                                                .put("type", "OBJECT")
-                                                                .put("properties", new JSONObject()
-                                                                                .put("cart", new JSONObject()
-                                                                                                .put("type", "STRING")
-                                                                                                .put("description",
-                                                                                                                "Cart Details, like total item in cart, cart item, remove item from cart, cart Id")))
-                                                                .put("required", new JSONArray()
-                                                                                .put("cart"))))
-                                .put(new JSONObject()
-                                                .put("name", "getUsersOrder")
-                                                .put("description", "Retrieve the user's order details")
+                return new JSONArray().put(new JSONObject().put("name", "getUserCart")
+                                .put("description", "Retrieve the user's cart details")
+                                .put("parameters", new JSONObject().put("type", "OBJECT").put(
+                                                "properties",
+                                                new JSONObject().put("cart", new JSONObject()
+                                                                .put("type", "STRING")
+                                                                .put("description",
+                                                                                "Cart Details, like total item in cart, cart item, remove item from cart, cart Id")))
+                                                .put("required", new JSONArray().put("cart"))))
+                                .put(new JSONObject().put("name", "getUsersOrder")
+                                                .put("description",
+                                                                "Retrieve the user's order details")
                                                 .put("parameters", new JSONObject()
                                                                 .put("type", "OBJECT")
                                                                 .put("properties", new JSONObject()
@@ -65,8 +61,7 @@ public class AiChatBotServiceImpl implements AiChatBotService {
                                                                                                                 "Order Details, order, total order, current order, delivered order, pending order, current order, cancled order")))
                                                                 .put("required", new JSONArray()
                                                                                 .put("order"))))
-                                .put(new JSONObject()
-                                                .put("name", "getProductDetails")
+                                .put(new JSONObject().put("name", "getProductDetails")
                                                 .put("description", "Retrieve product details")
                                                 .put("parameters", new JSONObject()
                                                                 .put("type", "OBJECT")
@@ -79,8 +74,7 @@ public class AiChatBotServiceImpl implements AiChatBotService {
                                                                                 .put("product"))));
         }
 
-        private FunctionResponse processFunctionCall(JSONObject functionCall,
-                        Long productId,
+        private FunctionResponse processFunctionCall(JSONObject functionCall, Long productId,
                         Long userId) throws ProductException {
                 String functionName = functionCall.getString("name");
                 JSONObject args = functionCall.getJSONObject("args");
@@ -100,7 +94,8 @@ public class AiChatBotServiceImpl implements AiChatBotService {
                                 // Long orderId = Long.parseLong(args.getString("orderId"));
                                 List<Order> orders = orderRepository.findByUserId(userId);
                                 res.setOrderHistory(OrderMapper.toOrderHistory(orders, user));
-                                System.out.println("order history: " + OrderMapper.toOrderHistory(orders, user));
+                                System.out.println("order history: "
+                                                + OrderMapper.toOrderHistory(orders, user));
                                 break;
                         case "getProductDetails":
                                 // Long productId = Long.parseLong(args.getString("productId"));
@@ -110,35 +105,35 @@ public class AiChatBotServiceImpl implements AiChatBotService {
                                 res.setProduct(product);
                                 break;
                         default:
-                                throw new IllegalArgumentException("Unsupported function: " + functionName);
+                                throw new IllegalArgumentException(
+                                                "Unsupported function: " + functionName);
                 }
                 return res;
         }
 
         public FunctionResponse getFunctionResponse(String prompt, Long productId, Long userId)
                         throws ProductException {
-                String GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key="
-                                + GEMINI_API_KEY;
+                String GEMINI_API_URL =
+                                "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key="
+                                                + GEMINI_API_KEY;
 
                 JSONObject requestBodyJson = new JSONObject()
-                                .put("contents", new JSONArray()
-                                                .put(new JSONObject()
-                                                                .put("parts", new JSONArray()
-                                                                                .put(new JSONObject()
-                                                                                                .put("text", prompt)))))
+                                .put("contents", new JSONArray().put(new JSONObject().put("parts",
+                                                new JSONArray().put(new JSONObject().put("text",
+                                                                prompt)))))
                                 .put("tools", new JSONArray()
-                                                .put(new JSONObject()
-                                                                .put("functionDeclarations",
-                                                                                createFunctionDeclarations())));
+                                                .put(new JSONObject().put("functionDeclarations",
+                                                                createFunctionDeclarations())));
 
                 HttpHeaders headers = new HttpHeaders();
                 headers.setContentType(org.springframework.http.MediaType.APPLICATION_JSON);
 
-                HttpEntity<String> requestEntity = new HttpEntity<>(requestBodyJson.toString(), headers);
+                HttpEntity<String> requestEntity =
+                                new HttpEntity<>(requestBodyJson.toString(), headers);
 
                 RestTemplate restTemplate = new RestTemplate();
-                ResponseEntity<String> response = restTemplate.postForEntity(GEMINI_API_URL, requestEntity,
-                                String.class);
+                ResponseEntity<String> response = restTemplate.postForEntity(GEMINI_API_URL,
+                                requestEntity, String.class);
 
                 String responseBody = response.getBody();
                 JSONObject jsonObject = new JSONObject(responseBody);
@@ -155,9 +150,11 @@ public class AiChatBotServiceImpl implements AiChatBotService {
         }
 
         @Override
-        public ApiResponse aiChatBot(String prompt, Long productId, Long userId) throws ProductException {
-                String GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key="
-                                + GEMINI_API_KEY;
+        public ApiResponse aiChatBot(String prompt, Long productId, Long userId)
+                        throws ProductException {
+                String GEMINI_API_URL =
+                                "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key="
+                                                + GEMINI_API_KEY;
 
                 System.out.println("------- " + prompt);
 
@@ -169,59 +166,56 @@ public class AiChatBotServiceImpl implements AiChatBotService {
 
                 // Construct the request body
                 String body = new JSONObject()
-                                .put("contents", new JSONArray()
-                                                .put(new JSONObject()
-                                                                .put("role", "user")
-                                                                .put("parts", new JSONArray()
-                                                                                .put(new JSONObject()
-                                                                                                .put("text", prompt))))
-                                                .put(new JSONObject()
-                                                                .put("role", "model")
-                                                                .put("parts", new JSONArray()
-                                                                                .put(new JSONObject()
-                                                                                                .put("functionCall",
-                                                                                                                new JSONObject()
+                                .put("contents", new JSONArray().put(new JSONObject()
+                                                .put("role", "user")
+                                                .put("parts", new JSONArray().put(
+                                                                new JSONObject().put("text",
+                                                                                prompt))))
+                                                .put(new JSONObject().put("role", "model").put(
+                                                                "parts",
+                                                                new JSONArray().put(new JSONObject()
+                                                                                .put("functionCall",
+                                                                                                new JSONObject().put(
+                                                                                                                "name",
+                                                                                                                functionResponse.getFunctionName())
+                                                                                                                .put("args", new JSONObject()
+                                                                                                                                .put("cart", functionResponse
+                                                                                                                                                .getUserCart() != null
+                                                                                                                                                                ? functionResponse
+                                                                                                                                                                                .getUserCart()
+                                                                                                                                                                                .getUser()
+                                                                                                                                                                : null)
+                                                                                                                                .put("order", functionResponse
+                                                                                                                                                .getOrderHistory() != null
+                                                                                                                                                                ? functionResponse
+                                                                                                                                                                                .getOrderHistory()
+                                                                                                                                                                : null)
+                                                                                                                                .put("product", functionResponse
+                                                                                                                                                .getProduct() != null
+                                                                                                                                                                ? ProductMapper.toProductDto(
+                                                                                                                                                                                functionResponse.getProduct())
+                                                                                                                                                                : null))))))
+                                                .put(new JSONObject().put("role", "function").put(
+                                                                "parts",
+                                                                new JSONArray().put(new JSONObject()
+                                                                                .put("functionResponse",
+                                                                                                new JSONObject().put(
+                                                                                                                "name",
+                                                                                                                functionResponse.getFunctionName())
+                                                                                                                .put("response", new JSONObject()
                                                                                                                                 .put("name", functionResponse
                                                                                                                                                 .getFunctionName())
-                                                                                                                                .put("args", new JSONObject()
-                                                                                                                                                .put("cart", functionResponse
-                                                                                                                                                                .getUserCart() != null
-                                                                                                                                                                                ? functionResponse
-                                                                                                                                                                                                .getUserCart()
-                                                                                                                                                                                                .getUser()
-                                                                                                                                                                                : null)
-                                                                                                                                                .put("order", functionResponse
-                                                                                                                                                                .getOrderHistory() != null
-                                                                                                                                                                                ? functionResponse
-                                                                                                                                                                                                .getOrderHistory()
-                                                                                                                                                                                : null)
-                                                                                                                                                .put("product", functionResponse
-                                                                                                                                                                .getProduct() != null
-                                                                                                                                                                                ? ProductMapper.toProductDto(
-                                                                                                                                                                                                functionResponse.getProduct())
-                                                                                                                                                                                : null))))))
-                                                .put(new JSONObject()
-                                                                .put("role", "function")
-                                                                .put("parts", new JSONArray()
-                                                                                .put(new JSONObject()
-                                                                                                .put("functionResponse",
-                                                                                                                new JSONObject()
-                                                                                                                                .put("name", functionResponse
-                                                                                                                                                .getFunctionName())
-                                                                                                                                .put("response", new JSONObject()
-                                                                                                                                                .put("name", functionResponse
-                                                                                                                                                                .getFunctionName())
-                                                                                                                                                .put("content", functionResponse)))))))
+                                                                                                                                .put("content", functionResponse)))))))
                                 .put("tools", new JSONArray()
-                                                .put(new JSONObject()
-                                                                .put("functionDeclarations",
-                                                                                createFunctionDeclarations())))
+                                                .put(new JSONObject().put("functionDeclarations",
+                                                                createFunctionDeclarations())))
                                 .toString();
 
                 // Make the API request
                 HttpEntity<String> request = new HttpEntity<>(body, headers);
                 RestTemplate restTemplate = new RestTemplate();
-                ResponseEntity<String> response = restTemplate.postForEntity(GEMINI_API_URL, request, String.class);
+                ResponseEntity<String> response =
+                                restTemplate.postForEntity(GEMINI_API_URL, request, String.class);
 
                 // Process the response
                 String responseBody = response.getBody();

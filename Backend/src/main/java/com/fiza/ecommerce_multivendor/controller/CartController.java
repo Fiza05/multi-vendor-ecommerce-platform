@@ -1,5 +1,16 @@
 package com.fiza.ecommerce_multivendor.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.fiza.ecommerce_multivendor.exception.CartItemException;
 import com.fiza.ecommerce_multivendor.exception.ProductException;
 import com.fiza.ecommerce_multivendor.exception.UserException;
@@ -13,11 +24,8 @@ import com.fiza.ecommerce_multivendor.service.CartItemService;
 import com.fiza.ecommerce_multivendor.service.CartService;
 import com.fiza.ecommerce_multivendor.service.ProductService;
 import com.fiza.ecommerce_multivendor.service.UserService;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/cart")
@@ -30,7 +38,8 @@ public class CartController {
 	private final CartItemService cartItemService;
 
 	@GetMapping
-	public ResponseEntity<Cart> findUserCartHandler(@RequestHeader("Authorization") String jwt) throws UserException {
+	public ResponseEntity<Cart> findUserCartHandler(@RequestHeader("Authorization") String jwt)
+			throws UserException {
 
 		User user = userService.findUserProfileByJwt(jwt);
 
@@ -48,20 +57,15 @@ public class CartController {
 		User user = userService.findUserProfileByJwt(jwt);
 		Product product = productService.findProductById(req.getProductId());
 
-		CartItem item = cartService.addCartItem(user,
-				product,
-				req.getSize(),
-				req.getQuantity());
+		CartItem item = cartService.addCartItem(user, product, req.getSize(), req.getQuantity());
 
 		return new ResponseEntity<>(item, HttpStatus.ACCEPTED);
 
 	}
 
 	@DeleteMapping("/item/{cartItemId}")
-	public ResponseEntity<ApiResponse> deleteCartItemHandler(
-			@PathVariable Long cartItemId,
-			@RequestHeader("Authorization") String jwt)
-			throws CartItemException, UserException {
+	public ResponseEntity<ApiResponse> deleteCartItemHandler(@PathVariable Long cartItemId,
+			@RequestHeader("Authorization") String jwt) throws CartItemException, UserException {
 
 		User user = userService.findUserProfileByJwt(jwt);
 		cartItemService.removeCartItem(user.getId(), cartItemId);
@@ -72,18 +76,15 @@ public class CartController {
 	}
 
 	@PutMapping("/item/{cartItemId}")
-	public ResponseEntity<CartItem> updateCartItemHandler(
-			@PathVariable Long cartItemId,
-			@RequestBody CartItem cartItem,
-			@RequestHeader("Authorization") String jwt)
+	public ResponseEntity<CartItem> updateCartItemHandler(@PathVariable Long cartItemId,
+			@RequestBody CartItem cartItem, @RequestHeader("Authorization") String jwt)
 			throws CartItemException, UserException {
 
 		User user = userService.findUserProfileByJwt(jwt);
 
 		CartItem updatedCartItem = null;
 		if (cartItem.getQuantity() > 0) {
-			updatedCartItem = cartItemService.updateCartItem(user.getId(),
-					cartItemId, cartItem);
+			updatedCartItem = cartItemService.updateCartItem(user.getId(), cartItemId, cartItem);
 		}
 
 		return new ResponseEntity<>(updatedCartItem, HttpStatus.ACCEPTED);

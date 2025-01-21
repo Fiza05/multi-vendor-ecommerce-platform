@@ -1,27 +1,9 @@
 package com.fiza.ecommerce_multivendor.service.impl;
 
-import com.fiza.ecommerce_multivendor.config.JwtProvider;
-import com.fiza.ecommerce_multivendor.domain.USER_ROLE;
-import com.fiza.ecommerce_multivendor.exception.SellerException;
-import com.fiza.ecommerce_multivendor.exception.UserException;
-import com.fiza.ecommerce_multivendor.model.Cart;
-import com.fiza.ecommerce_multivendor.model.PasswordResetToken;
-import com.fiza.ecommerce_multivendor.model.User;
-import com.fiza.ecommerce_multivendor.model.VerificationCode;
-import com.fiza.ecommerce_multivendor.repository.CartRepository;
-import com.fiza.ecommerce_multivendor.repository.UserRepository;
-import com.fiza.ecommerce_multivendor.repository.VerificationCodeRepository;
-import com.fiza.ecommerce_multivendor.request.LoginRequest;
-import com.fiza.ecommerce_multivendor.request.ResetPasswordRequest;
-import com.fiza.ecommerce_multivendor.request.SignupRequest;
-import com.fiza.ecommerce_multivendor.response.ApiResponse;
-import com.fiza.ecommerce_multivendor.response.AuthResponse;
-import com.fiza.ecommerce_multivendor.service.AuthService;
-import com.fiza.ecommerce_multivendor.service.EmailService;
-import com.fiza.ecommerce_multivendor.service.UserService;
-import com.fiza.ecommerce_multivendor.utils.OtpUtils;
-import jakarta.mail.MessagingException;
-import lombok.RequiredArgsConstructor;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -32,9 +14,26 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import com.fiza.ecommerce_multivendor.config.JwtProvider;
+import com.fiza.ecommerce_multivendor.domain.USER_ROLE;
+import com.fiza.ecommerce_multivendor.exception.SellerException;
+import com.fiza.ecommerce_multivendor.exception.UserException;
+import com.fiza.ecommerce_multivendor.model.Cart;
+import com.fiza.ecommerce_multivendor.model.User;
+import com.fiza.ecommerce_multivendor.model.VerificationCode;
+import com.fiza.ecommerce_multivendor.repository.CartRepository;
+import com.fiza.ecommerce_multivendor.repository.UserRepository;
+import com.fiza.ecommerce_multivendor.repository.VerificationCodeRepository;
+import com.fiza.ecommerce_multivendor.request.LoginRequest;
+import com.fiza.ecommerce_multivendor.request.SignupRequest;
+import com.fiza.ecommerce_multivendor.response.AuthResponse;
+import com.fiza.ecommerce_multivendor.service.AuthService;
+import com.fiza.ecommerce_multivendor.service.EmailService;
+import com.fiza.ecommerce_multivendor.service.UserService;
+import com.fiza.ecommerce_multivendor.utils.OtpUtils;
+
+import jakarta.mail.MessagingException;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -61,8 +60,7 @@ public class AuthServiceImpl implements AuthService {
             userService.findUserByEmail(email);
         }
 
-        VerificationCode isExist = verificationCodeRepository
-                .findByEmail(email);
+        VerificationCode isExist = verificationCodeRepository.findByEmail(email);
 
         if (isExist != null) {
             verificationCodeRepository.delete(isExist);
@@ -117,11 +115,10 @@ public class AuthServiceImpl implements AuthService {
 
         List<GrantedAuthority> authorities = new ArrayList<>();
 
-        authorities.add(new SimpleGrantedAuthority(
-                USER_ROLE.ROLE_CUSTOMER.toString()));
+        authorities.add(new SimpleGrantedAuthority(USER_ROLE.ROLE_CUSTOMER.toString()));
 
-        Authentication authentication = new UsernamePasswordAuthenticationToken(
-                email, null, authorities);
+        Authentication authentication =
+                new UsernamePasswordAuthenticationToken(email, null, authorities);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         return jwtProvider.generateToken(authentication);
@@ -145,7 +142,8 @@ public class AuthServiceImpl implements AuthService {
         authResponse.setJwt(token);
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
-        String roleName = authorities.isEmpty() ? null : authorities.iterator().next().getAuthority();
+        String roleName =
+                authorities.isEmpty() ? null : authorities.iterator().next().getAuthority();
 
         authResponse.setRole(USER_ROLE.valueOf(roleName));
 
@@ -167,6 +165,7 @@ public class AuthServiceImpl implements AuthService {
         if (verificationCode == null || !verificationCode.getOtp().equals(otp)) {
             throw new SellerException("wrong otp...");
         }
-        return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        return new UsernamePasswordAuthenticationToken(userDetails, null,
+                userDetails.getAuthorities());
     }
 }

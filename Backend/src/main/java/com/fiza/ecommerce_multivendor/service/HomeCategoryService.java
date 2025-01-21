@@ -1,8 +1,8 @@
 package com.fiza.ecommerce_multivendor.service;
 
-import com.fiza.ecommerce_multivendor.model.HomeCategory;
-
 import java.util.List;
+
+import com.fiza.ecommerce_multivendor.model.HomeCategory;
 
 public interface HomeCategoryService {
     HomeCategory createCategory(HomeCategory categories);

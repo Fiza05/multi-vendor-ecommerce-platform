@@ -1,14 +1,13 @@
 package com.fiza.ecommerce_multivendor.service.impl;
 
+import org.springframework.stereotype.Service;
+
 import com.fiza.ecommerce_multivendor.model.Seller;
 import com.fiza.ecommerce_multivendor.model.SellerReport;
 import com.fiza.ecommerce_multivendor.repository.SellerReportRepository;
 import com.fiza.ecommerce_multivendor.service.SellerReportService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor

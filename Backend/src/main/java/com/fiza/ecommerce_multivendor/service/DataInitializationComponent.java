@@ -1,13 +1,14 @@
 package com.fiza.ecommerce_multivendor.service;
 
-import com.fiza.ecommerce_multivendor.domain.USER_ROLE;
-import com.fiza.ecommerce_multivendor.model.User;
-import com.fiza.ecommerce_multivendor.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import com.fiza.ecommerce_multivendor.domain.USER_ROLE;
+import com.fiza.ecommerce_multivendor.model.User;
+import com.fiza.ecommerce_multivendor.repository.UserRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor

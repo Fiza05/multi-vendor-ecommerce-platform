@@ -1,18 +1,15 @@
 package com.fiza.ecommerce_multivendor.dto;
 
-import com.fiza.ecommerce_multivendor.domain.OrderStatus;
-import com.fiza.ecommerce_multivendor.domain.PaymentStatus;
-import com.fiza.ecommerce_multivendor.model.Address;
-import com.fiza.ecommerce_multivendor.model.OrderItem;
-import com.fiza.ecommerce_multivendor.model.PaymentDetails;
-import com.fiza.ecommerce_multivendor.model.User;
-import jakarta.persistence.*;
-import lombok.Data;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.fiza.ecommerce_multivendor.domain.OrderStatus;
+import com.fiza.ecommerce_multivendor.domain.PaymentStatus;
+import com.fiza.ecommerce_multivendor.model.Address;
+import com.fiza.ecommerce_multivendor.model.PaymentDetails;
+
+import lombok.Data;
 
 @Data
 public class OrderDto {

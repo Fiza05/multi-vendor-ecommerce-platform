@@ -35,8 +35,7 @@ public class PaymentController {
 
     @PostMapping("/api/payment/{paymentMethod}/order/{orderId}")
     public ResponseEntity<PaymentLinkResponse> paymentHandler(
-            @PathVariable PaymentMethod paymentMethod,
-            @PathVariable Long orderId,
+            @PathVariable PaymentMethod paymentMethod, @PathVariable Long orderId,
             @RequestHeader("Authorization") String jwt) throws Exception {
 
         User user = userService.findUserProfileByJwt(jwt);
@@ -60,22 +59,18 @@ public class PaymentController {
     }
 
     @GetMapping("/api/payment/{paymentId}")
-    public ResponseEntity<ApiResponse> paymentSuccessHandler(
-            @PathVariable String paymentId,
-            @RequestParam String paymentLinkId,
-            @RequestHeader("Authorization") String jwt) throws Exception {
+    public ResponseEntity<ApiResponse> paymentSuccessHandler(@PathVariable String paymentId,
+            @RequestParam String paymentLinkId, @RequestHeader("Authorization") String jwt)
+            throws Exception {
 
         User user = userService.findUserProfileByJwt(jwt);
 
         PaymentLinkResponse paymentResponse;
 
-        PaymentOrder paymentOrder = paymentService
-                .getPaymentOrderByPaymentId(paymentLinkId);
+        PaymentOrder paymentOrder = paymentService.getPaymentOrderByPaymentId(paymentLinkId);
 
-        boolean paymentSuccess = paymentService.ProceedPaymentOrder(
-                paymentOrder,
-                paymentId,
-                paymentLinkId);
+        boolean paymentSuccess =
+                paymentService.ProceedPaymentOrder(paymentOrder, paymentId, paymentLinkId);
         if (paymentSuccess) {
             for (Order order : paymentOrder.getOrders()) {
                 transactionService.createTransaction(order);

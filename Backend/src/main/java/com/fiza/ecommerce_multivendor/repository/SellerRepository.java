@@ -1,10 +1,11 @@
 package com.fiza.ecommerce_multivendor.repository;
 
-import com.fiza.ecommerce_multivendor.domain.AccountStatus;
-import com.fiza.ecommerce_multivendor.model.Seller;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
+import com.fiza.ecommerce_multivendor.domain.AccountStatus;
+import com.fiza.ecommerce_multivendor.model.Seller;
 
 public interface SellerRepository extends JpaRepository<Seller, Long> {
 

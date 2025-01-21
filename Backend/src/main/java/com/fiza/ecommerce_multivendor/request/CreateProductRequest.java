@@ -1,11 +1,7 @@
 package com.fiza.ecommerce_multivendor.request;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-import com.fiza.ecommerce_multivendor.model.Category;
 import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Data;

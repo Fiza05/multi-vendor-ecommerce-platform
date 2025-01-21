@@ -1,5 +1,8 @@
 package com.fiza.ecommerce_multivendor.mapper;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.fiza.ecommerce_multivendor.domain.OrderStatus;
 import com.fiza.ecommerce_multivendor.dto.OrderDto;
 import com.fiza.ecommerce_multivendor.dto.OrderHistory;
@@ -7,9 +10,6 @@ import com.fiza.ecommerce_multivendor.dto.OrderItemDto;
 import com.fiza.ecommerce_multivendor.model.Order;
 import com.fiza.ecommerce_multivendor.model.OrderItem;
 import com.fiza.ecommerce_multivendor.model.User;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class OrderMapper {
 
@@ -60,8 +60,8 @@ public class OrderMapper {
         orderDto.setOrderId(order.getOrderId());
         orderDto.setUser(UserMapper.toUserDto(order.getUser()));
         orderDto.setSellerId(order.getSellerId());
-        orderDto.setOrderItems(
-                order.getOrderItems().stream().map(OrderMapper::toOrderItemDto).collect(Collectors.toList()));
+        orderDto.setOrderItems(order.getOrderItems().stream().map(OrderMapper::toOrderItemDto)
+                .collect(Collectors.toList()));
         orderDto.setShippingAddress(order.getShippingAddress());
         orderDto.setPaymentDetails(order.getPaymentDetails());
         orderDto.setTotalMrpPrice(order.getTotalMrpPrice());
@@ -117,8 +117,7 @@ public class OrderMapper {
         List<OrderDto> currentOrders = orders.stream()
                 .filter(order -> order.getOrderStatus() != OrderStatus.DELIVERED
                         && order.getOrderStatus() != OrderStatus.CANCELLED)
-                .map(OrderMapper::toOrderDto)
-                .collect(Collectors.toList());
+                .map(OrderMapper::toOrderDto).collect(Collectors.toList());
 
         orderHistory.setCurrentOrders(currentOrders);
 
@@ -127,14 +126,12 @@ public class OrderMapper {
 
         // Set cancelled orders
         int cancelledOrders = (int) orders.stream()
-                .filter(order -> order.getOrderStatus() == OrderStatus.CANCELLED)
-                .count();
+                .filter(order -> order.getOrderStatus() == OrderStatus.CANCELLED).count();
         orderHistory.setCancelledOrders(cancelledOrders);
 
         // Set completed orders (those that are DELIVERED)
         int completedOrders = (int) orders.stream()
-                .filter(order -> order.getOrderStatus() == OrderStatus.DELIVERED)
-                .count();
+                .filter(order -> order.getOrderStatus() == OrderStatus.DELIVERED).count();
         orderHistory.setCompletedOrders(completedOrders);
 
         return orderHistory;

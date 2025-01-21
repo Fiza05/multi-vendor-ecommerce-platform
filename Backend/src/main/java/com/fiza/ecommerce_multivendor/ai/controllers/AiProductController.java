@@ -17,7 +17,8 @@ public class AiProductController {
     }
 
     @PostMapping("/chat/demo")
-    public ApiResponse generate(@RequestParam(value = "message", defaultValue = "Tell me a joke") String message)
+    public ApiResponse generate(
+            @RequestParam(value = "message", defaultValue = "Tell me a joke") String message)
             throws Exception {
 
         String ans = productService.simpleChat(message);

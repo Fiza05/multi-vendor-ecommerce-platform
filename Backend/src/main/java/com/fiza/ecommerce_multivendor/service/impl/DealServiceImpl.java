@@ -1,15 +1,16 @@
 package com.fiza.ecommerce_multivendor.service.impl;
 
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.fiza.ecommerce_multivendor.model.Deal;
-import com.fiza.ecommerce_multivendor.model.Home;
 import com.fiza.ecommerce_multivendor.model.HomeCategory;
 import com.fiza.ecommerce_multivendor.repository.DealRepository;
 import com.fiza.ecommerce_multivendor.repository.HomeCategoryRepository;
 import com.fiza.ecommerce_multivendor.service.DealService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -19,8 +20,8 @@ public class DealServiceImpl implements DealService {
 
     @Override
     public Deal createDeal(Deal deal) {
-        HomeCategory category = homeCategoryRepository
-                .findById(deal.getCategory().getId()).orElse(null);
+        HomeCategory category =
+                homeCategoryRepository.findById(deal.getCategory().getId()).orElse(null);
         Deal newDeal = new Deal();
         newDeal.setCategory(category);
         newDeal.setDiscount(deal.getDiscount());
@@ -44,7 +45,8 @@ public class DealServiceImpl implements DealService {
     @Override
     public Deal updateDeal(Deal deal, Long id) throws Exception {
         Deal existingDeal = dealRepository.findById(id).orElse(null);
-        HomeCategory category = homeCategoryRepository.findById(deal.getCategory().getId()).orElse(null);
+        HomeCategory category =
+                homeCategoryRepository.findById(deal.getCategory().getId()).orElse(null);
 
         if (existingDeal != null) {
             if (deal.getDiscount() != null) {

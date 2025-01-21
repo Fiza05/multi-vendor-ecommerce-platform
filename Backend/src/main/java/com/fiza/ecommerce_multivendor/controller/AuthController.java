@@ -33,8 +33,8 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/sent/login-signup-otp")
-    public ResponseEntity<ApiResponse> sentLoginOtp(
-            @RequestBody VerificationCode req) throws MessagingException, UserException {
+    public ResponseEntity<ApiResponse> sentLoginOtp(@RequestBody VerificationCode req)
+            throws MessagingException, UserException {
 
         authService.sentLoginOtp(req.getEmail());
 
@@ -44,8 +44,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<AuthResponse> createUserHandler(
-            @Valid @RequestBody SignupRequest req)
+    public ResponseEntity<AuthResponse> createUserHandler(@Valid @RequestBody SignupRequest req)
             throws SellerException {
 
         String token = authService.createUser(req);
@@ -59,7 +58,8 @@ public class AuthController {
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<AuthResponse> signin(@RequestBody LoginRequest loginRequest) throws SellerException {
+    public ResponseEntity<AuthResponse> signin(@RequestBody LoginRequest loginRequest)
+            throws SellerException {
 
         AuthResponse authResponse = authService.signin(loginRequest);
         return new ResponseEntity<>(authResponse, HttpStatus.OK);

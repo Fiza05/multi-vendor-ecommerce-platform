@@ -1,15 +1,24 @@
 package com.fiza.ecommerce_multivendor.controller;
 
-import com.fiza.ecommerce_multivendor.model.Deal;
-import com.fiza.ecommerce_multivendor.model.HomeCategory;
-import com.fiza.ecommerce_multivendor.response.ApiResponse;
-import com.fiza.ecommerce_multivendor.service.DealService;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.fiza.ecommerce_multivendor.model.Deal;
+import com.fiza.ecommerce_multivendor.response.ApiResponse;
+import com.fiza.ecommerce_multivendor.service.DealService;
+
+import lombok.RequiredArgsConstructor;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -18,8 +27,7 @@ public class DealController {
     private final DealService dealService;
 
     @PostMapping
-    public ResponseEntity<Deal> createDeals(
-            @RequestBody Deal deals) {
+    public ResponseEntity<Deal> createDeals(@RequestBody Deal deals) {
         Deal createdDeals = dealService.createDeal(deals);
 
         return new ResponseEntity<>(createdDeals, HttpStatus.ACCEPTED);
@@ -35,9 +43,8 @@ public class DealController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Deal> updateDeal(
-            @PathVariable Long id,
-            @RequestBody Deal deal) throws Exception {
+    public ResponseEntity<Deal> updateDeal(@PathVariable Long id, @RequestBody Deal deal)
+            throws Exception {
 
         Deal updatedDeal = dealService.updateDeal(deal, id);
         return ResponseEntity.ok(updatedDeal);
@@ -45,8 +52,7 @@ public class DealController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse> deleteDeals(
-            @PathVariable Long id) throws Exception {
+    public ResponseEntity<ApiResponse> deleteDeals(@PathVariable Long id) throws Exception {
         dealService.deleteDeal(id);
 
         ApiResponse apiResponse = new ApiResponse();

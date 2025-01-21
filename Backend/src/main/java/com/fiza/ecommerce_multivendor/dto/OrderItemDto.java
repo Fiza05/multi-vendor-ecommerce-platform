@@ -1,12 +1,5 @@
 package com.fiza.ecommerce_multivendor.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fiza.ecommerce_multivendor.model.Order;
-import com.fiza.ecommerce_multivendor.model.Product;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 import lombok.Data;
 
 @Data

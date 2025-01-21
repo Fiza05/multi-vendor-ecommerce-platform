@@ -1,14 +1,10 @@
 package com.fiza.ecommerce_multivendor.dto;
 
-import com.fiza.ecommerce_multivendor.model.Category;
-import com.fiza.ecommerce_multivendor.model.Review;
-import com.fiza.ecommerce_multivendor.model.Seller;
-import jakarta.persistence.*;
-import lombok.*;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import lombok.Data;
 
 @Data
 public class ProductDto {

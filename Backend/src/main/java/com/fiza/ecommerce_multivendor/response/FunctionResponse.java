@@ -2,9 +2,11 @@ package com.fiza.ecommerce_multivendor.response;
 
 import com.fiza.ecommerce_multivendor.dto.OrderHistory;
 import com.fiza.ecommerce_multivendor.model.Cart;
-import com.fiza.ecommerce_multivendor.model.Order;
 import com.fiza.ecommerce_multivendor.model.Product;
-import lombok.*;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor

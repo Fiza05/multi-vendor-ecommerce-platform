@@ -1,22 +1,15 @@
 package com.fiza.ecommerce_multivendor.service.impl;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
-
-import com.fiza.ecommerce_multivendor.exception.UserException;
-import com.fiza.ecommerce_multivendor.service.UserService;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.fiza.ecommerce_multivendor.config.JwtProvider;
-import com.fiza.ecommerce_multivendor.model.PasswordResetToken;
+import com.fiza.ecommerce_multivendor.exception.UserException;
 import com.fiza.ecommerce_multivendor.model.User;
 import com.fiza.ecommerce_multivendor.repository.PasswordResetTokenRepository;
 import com.fiza.ecommerce_multivendor.repository.UserRepository;
+import com.fiza.ecommerce_multivendor.service.UserService;
 
 @Service
 public class UserServiceImplementation implements UserService {
@@ -27,9 +20,7 @@ public class UserServiceImplementation implements UserService {
 	private PasswordResetTokenRepository passwordResetTokenRepository;
 	private JavaMailSender javaMailSender;
 
-	public UserServiceImplementation(
-			UserRepository userRepository,
-			JwtProvider jwtProvider,
+	public UserServiceImplementation(UserRepository userRepository, JwtProvider jwtProvider,
 			PasswordEncoder passwordEncoder,
 			PasswordResetTokenRepository passwordResetTokenRepository,
 			JavaMailSender javaMailSender) {

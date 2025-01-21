@@ -1,11 +1,10 @@
 package com.fiza.ecommerce_multivendor.service;
 
+import java.util.List;
+
 import com.fiza.ecommerce_multivendor.model.Cart;
 import com.fiza.ecommerce_multivendor.model.Coupon;
 import com.fiza.ecommerce_multivendor.model.User;
-
-import java.util.List;
-import java.util.Optional;
 
 public interface CouponService {
     Cart applyCoupon(String code, double orderValue, User user) throws Exception;

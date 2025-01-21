@@ -1,16 +1,20 @@
 package com.fiza.ecommerce_multivendor.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.fiza.ecommerce_multivendor.domain.PaymentMethod;
 import com.fiza.ecommerce_multivendor.domain.PaymentOrderStatus;
-import jakarta.persistence.*;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Entity
 @AllArgsConstructor

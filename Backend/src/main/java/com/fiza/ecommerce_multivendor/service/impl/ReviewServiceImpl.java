@@ -1,5 +1,11 @@
 package com.fiza.ecommerce_multivendor.service.impl;
 
+import java.util.List;
+
+import javax.naming.AuthenticationException;
+
+import org.springframework.stereotype.Service;
+
 import com.fiza.ecommerce_multivendor.exception.ReviewNotFoundException;
 import com.fiza.ecommerce_multivendor.model.Product;
 import com.fiza.ecommerce_multivendor.model.Review;
@@ -7,11 +13,8 @@ import com.fiza.ecommerce_multivendor.model.User;
 import com.fiza.ecommerce_multivendor.repository.ReviewRepository;
 import com.fiza.ecommerce_multivendor.request.CreateReviewRequest;
 import com.fiza.ecommerce_multivendor.service.ReviewService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
-import javax.naming.AuthenticationException;
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -20,9 +23,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewRepository reviewRepository;
 
     @Override
-    public Review createReview(CreateReviewRequest req,
-            User user,
-            Product product) {
+    public Review createReview(CreateReviewRequest req, User user, Product product) {
         Review newReview = new Review();
 
         newReview.setReviewText(req.getReviewText());
@@ -42,10 +43,8 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Review updateReview(Long reviewId,
-            String reviewText,
-            double rating,
-            Long userId) throws ReviewNotFoundException, AuthenticationException {
+    public Review updateReview(Long reviewId, String reviewText, double rating, Long userId)
+            throws ReviewNotFoundException, AuthenticationException {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new ReviewNotFoundException("Review Not found"));
 
@@ -59,8 +58,8 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public void deleteReview(Long reviewId, Long userId) throws ReviewNotFoundException,
-            AuthenticationException {
+    public void deleteReview(Long reviewId, Long userId)
+            throws ReviewNotFoundException, AuthenticationException {
         Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new ReviewNotFoundException("Review Not found"));
         if (review.getUser().getId() != userId) {
