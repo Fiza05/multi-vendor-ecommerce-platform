@@ -6,8 +6,6 @@ import com.fiza.ecommerce_multivendor.request.Prompt;
 import com.fiza.ecommerce_multivendor.response.ApiResponse;
 import com.fiza.ecommerce_multivendor.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
